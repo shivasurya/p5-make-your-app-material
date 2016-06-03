@@ -118,7 +118,7 @@ public class ArticleDetailFragment extends Fragment implements
             public void onScrollChanged() {
                 mScrollY = mScrollView.getScrollY();
                 getActivityCast().onUpButtonFloorChanged(mItemId, ArticleDetailFragment.this);
-                mPhotoContainerView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
+                mPhotoContainerView.setTranslationY((int) (mScrollY / PARALLAX_FACTOR));
                 updateStatusBar();
             }
         });

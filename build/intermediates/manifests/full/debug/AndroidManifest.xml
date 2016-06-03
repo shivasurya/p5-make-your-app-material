@@ -20,7 +20,8 @@
         android:theme="@style/Theme.Bacon" >
         <activity
             android:name="com.example.xyzreader.ui.ArticleListActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Bacon.Detail" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,10 +52,6 @@
             android:name="com.example.xyzreader.data.ItemsProvider"
             android:authorities="com.example.xyzreader"
             android:exported="false" />
-
-        <activity
-            android:name="android.support.v7.widget.TestActivity"
-            android:label="RecyclerViewTestActivity" />
     </application>
 
 </manifest>
