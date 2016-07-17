@@ -17,8 +17,9 @@
 
 <resources>
     <color name="photo_placeholder">#ccc</color>
-    <color name="primary">#9c27b0</color>
-    <color name="primary_dark">#7b1fa2</color>
-    <color name="accent">#536dfe</color>
+
+    <color name="orange_500">#ff5722</color>
+    <color name="orange_700">#e64a19</color>
+    <color name="light_blue_a200">#40c4ff</color>
     <color name="ltgray">#ffe0e0e0</color>
 </resources>

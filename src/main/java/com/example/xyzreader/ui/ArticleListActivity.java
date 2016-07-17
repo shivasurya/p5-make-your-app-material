@@ -1,16 +1,15 @@
 package com.example.xyzreader.ui;
 
-import android.app.LoaderManager;
+import android.support.v4.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.Loader;
+import android.support.v4.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -30,9 +29,10 @@ import com.example.xyzreader.data.UpdaterService;
  * touched, lead to a {@link ArticleDetailActivity} representing item details. On tablets, the
  * activity presents a grid of items as cards.
  */
-public class ArticleListActivity extends ActionBarActivity implements
+public class ArticleListActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
+    private Toolbar mToolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
 
@@ -41,20 +41,21 @@ public class ArticleListActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        final CollapsingToolbarLayout mct = (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar);
-        mct.setCollapsedTitleTextColor(getResources().getColor(android.R.color.white));
-        mct.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
-        if (mct != null) {
-            mct.setTitle("XYZreader");
-        }
-
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        getLoaderManager().initLoader(0, null, this);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Set refresh to false so the refresh icon doesn't just spin indefinitely
+                // This is just a placeholder.
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        setSupportActionBar(mToolbar);
+        getSupportLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
             refresh();
@@ -146,13 +147,15 @@ public class ArticleListActivity extends ActionBarActivity implements
         public void onBindViewHolder(ViewHolder holder, int position) {
             mCursor.moveToPosition(position);
             holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
-            holder.subtitleView.setText(
-                    DateUtils.getRelativeTimeSpanString(
-                            mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
-                            System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-                            DateUtils.FORMAT_ABBREV_ALL).toString()
-                            + " by "
-                            + mCursor.getString(ArticleLoader.Query.AUTHOR));
+
+            String subTitle = DateUtils.getRelativeTimeSpanString(
+                    mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
+                    System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
+                    DateUtils.FORMAT_ABBREV_ALL).toString()
+                    + " by "
+                    + mCursor.getString(ArticleLoader.Query.AUTHOR);
+            holder.subtitleView.setText(subTitle);
+
             holder.thumbnailView.setImageUrl(
                     mCursor.getString(ArticleLoader.Query.THUMB_URL),
                     ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
