@@ -22,4 +22,5 @@
     <color name="orange_700">#e64a19</color>
     <color name="light_blue_a200">#40c4ff</color>
     <color name="ltgray">#ffe0e0e0</color>
+    <color name="grey_subtitle">#6000</color>
 </resources>
